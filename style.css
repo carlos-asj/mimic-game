@@ -1,0 +1,7 @@
+.screen {
+    display: none;
+}
+
+.screen.active { display: block; }
+.teams-box { display: none;}
+.teams-box.active { display: block; }

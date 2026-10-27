@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MÍMICA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <section id="config" class="screen active">
+            <h1>MÍMICA</h1>
+            <input type="text" id="input-player" placeholder="Nome do jogador">
+            <button id="btn-add">Adicionar</button>
+            <button id="btn-send">Enviar</button>
+    
+            <ul id="players-list"></ul>
+            <p id="msg-err"></p>
+            <div id="teams-box" class="teams-box">
+                <div>
+                    <h3>Equipe 1</h3>
+                    <ul id="team-1"></ul>
+                </div>
+                <div>
+                    <h3>Equipe 2</h3>
+                    <ul id="team-2"></ul>
+                </div>
+
+                <button id="btn-shuffle">Embaralhar Times</button>
+            </div>
+    
+            <button id="btn-start" onclick="showScreen('screen-game')">Começar</button>
+        </section>
+        <section id="screen-game" class="screen">
+            <h1>JOGADOR: <span id="player"></span></h1>
+            <button onclick="showScreen('screen-round')">Próximo</button>
+        </section>
+        <section id="screen-round" class="screen">
+            <h1>TIMER</h1>
+            <h2>PALAVRAS</h2>
+            <button onclick="showScreen('screen-scores')">Terminar</button>
+        </section>
+        <section id="screen-scores" class="screen">
+            <h1>Pontuação</h1>
+            <button onclick="showScreen('screen-game')">Próxima vez</button>
+        </section>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
