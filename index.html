@@ -9,7 +9,7 @@
 <body>
     <main>
         <section id="config" class="screen active">
-            <h1>MÍMICA</h1>
+            <h1 class="title">JOGO DE MÍMICA</h1>
             <input type="text" id="input-player" placeholder="Nome do jogador">
             <button id="btn-add">Adicionar</button>
             <button id="btn-send">Enviar</button>
@@ -31,10 +31,16 @@
     
             <button id="btn-start" onclick="showScreen('screen-game')">Começar</button>
         </section>
+
         <section id="screen-game" class="screen">
-            <h1>JOGADOR: <span id="player"></span></h1>
+            <h1 class="title"><span id="player"></span></h1>
+            <button id="btn-words">Mostrar palavras</button>
+            <div id="word-box">
+                <ul id="words-list"></ul>
+            </div>
             <button onclick="showScreen('screen-round')">Próximo</button>
         </section>
+
         <section id="screen-round" class="screen">
             <h1>TIMER</h1>
             <h2>PALAVRAS</h2>

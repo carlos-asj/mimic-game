@@ -5,3 +5,8 @@
 .screen.active { display: block; }
 .teams-box { display: none;}
 .teams-box.active { display: block; }
+
+.title {
+    font-size: 2em;
+    text-align: center;
+}
