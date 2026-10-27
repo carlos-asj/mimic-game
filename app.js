@@ -1,9 +1,11 @@
+
 const state = {
     mode: null,
     players: [],
     times: [[], []],
     currentPlayer: 0,
     points: {},
+    words: []
 }
 
 const inputName = document.getElementById("input-player");
@@ -128,9 +130,18 @@ function sincScreenReady() {
         const team = state.teams[teamIndex];
         const roundTeam = Math.floor(state.currentPlayer / 2);
         const who = team[roundTeam % team.length];
-        el.textContent = `${who} (Time ${teamIndex + 1})`;
+        el.textContent = `${who}`;
     }
 }
+
+async function loadWords() {
+    const res = await fetch("words.json");
+    allWords = await res.json();
+}
+
+loadWords();
+
+document.getElementById("btn-words").addEventListener("click", drawWords());
 
 function sliceTeams(players) {
     const shuf = shuffle(players);
@@ -145,4 +156,39 @@ function shuffle(list) {
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+}
+
+function drawWords(qty = 3) {
+    let available = allWords.filter(w => !usedWordshas(w.word));
+
+    if (available.lenght < qty) {
+        usedWords.clear();
+        available = [...allWords];
+    }
+
+    const chosen = shuffle(available).slice(0, qty);
+    chosen.forEach(w => usedWords.add(w.word));
+    return chosen;
+}
+
+function showRoundWords() {
+    state.words = drawWords(3);
+
+    const ul = document.getElementById("words-list");
+    ul.innerHTML = "";
+    state.words.forEach(w => {
+        const li = document.createElement("li");
+        li.textContent = w.word;
+        ul.appendChild(li);
+    })
+}
+
+const DEV = new URLSearchParams(location.search).has("dev");
+
+if (DEV) {
+    state.players= ["Ana", "Beto", "Carlos", "Duda", "Eva", "Fábio"];
+    state.mode = "teams";
+    state.teams = sliceTeams(state.players);
+    renderPlayers();
+    renderTeams();
 }
