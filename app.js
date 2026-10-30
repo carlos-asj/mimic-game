@@ -1,6 +1,7 @@
 
 const state = {
     mode: null,
+    turn: 0,
     players: [],
     times: [[], []],
     currentPlayer: 0,
@@ -12,6 +13,11 @@ const inputName = document.getElementById("input-player");
 const listPlayers = document.getElementById("players-list");
 const msgError = document.getElementById("msg-err");
 const teamsBox = document.getElementById("teams-box");
+const wordBox = document.getElementById("word-box");
+const ROUND_TIME = 65;
+let timerId = null;
+const scoreTime1 = document.getElementById("score-time1");
+const scoreTime2 = document.getElementById("score-time2");
 
 document.getElementById("btn-add").addEventListener("click", () => {
     const name = inputName.value.trim();
@@ -90,29 +96,34 @@ document.getElementById("btn-shuffle").addEventListener("click", () => {
 });
 
 function startGame() {
-    const total = state.players.length;
 
-    if (total < 3) {
-        msgError.textContent = "São necessários pelo menos 3 jogadores para iniciar o jogo.";
+    if (!state.mode) {
+        msgError.textContent = "Clique em Enviar para definir os times."
         return;
     }
     msgError.textContent = "";
 
-    state.currentPlayer = 0;
+    state.turn = 0;
     state.points = {};
 
-    if (total === 3) {
-        state.mode = "solo";
+    if (state.mode === "solo") {
         state.players.forEach(j => state.points[j] = 0);
-        document.getElementById("btn-shuf").style.display = "block";
     } else {
-        state.mode = "teams";
-        state.teams = sliceTeams(state.players);
         state.points = { "Time 1": 0, "Time 2": 0 };
     }
 
+    resetRound();
+    renderCurrentPlayer();
     showScreen("screen-game");
-    sincScreenReady();
+}
+
+function resetRound() {
+    clearInterval(timerId);
+    timerId = null;
+
+    document.getElementById("timer").textContent = "";
+    document.getElementById("words-list").innerHTML = "";
+    document.getElementById("btn-words").disabled = false;
 }
 
 function showScreen(id) {
@@ -120,28 +131,8 @@ function showScreen(id) {
     document.getElementById(id).classList.add("active");
 }
 
-function sincScreenReady() {
-    const el = document.getElementById("player");
-
-    if (state.mode === "solo") {
-        el.textContent = state.players[state.currentPlayer % state.players.length];
-    } else {
-        const teamIndex = state.currentPlayer % 2;
-        const team = state.teams[teamIndex];
-        const roundTeam = Math.floor(state.currentPlayer / 2);
-        const who = team[roundTeam % team.length];
-        el.textContent = `${who}`;
-    }
-}
-
-async function loadWords() {
-    const res = await fetch("words.json");
-    allWords = await res.json();
-}
-
-loadWords();
-
-document.getElementById("btn-words").addEventListener("click", drawWords());
+const usedWords = new Set();
+let lastWords = [];
 
 function sliceTeams(players) {
     const shuf = shuffle(players);
@@ -159,15 +150,18 @@ function shuffle(list) {
 }
 
 function drawWords(qty = 3) {
-    let available = allWords.filter(w => !usedWordshas(w.word));
+    let available = allWords.filter(w => !usedWords.has(w.palavra));
 
-    if (available.lenght < qty) {
+    if (available.length < qty) {
         usedWords.clear();
-        available = [...allWords];
+        available = allWords.filter(w => !lastWords.includes(w.palavra));
+
+        if (available.length < qty) available = [...allWords];
     }
 
     const chosen = shuffle(available).slice(0, qty);
-    chosen.forEach(w => usedWords.add(w.word));
+    chosen.forEach(w => usedWords.add(w.palavra));
+    lastWords = chosen.map(w => w.palavra);
     return chosen;
 }
 
@@ -176,19 +170,122 @@ function showRoundWords() {
 
     const ul = document.getElementById("words-list");
     ul.innerHTML = "";
-    state.words.forEach(w => {
+    state.words.forEach((w, i) => {
         const li = document.createElement("li");
-        li.textContent = w.word;
+        const mid = Math.floor(state.words.length / 2);
+        li.style.setProperty("--pos", i - mid);
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.id = `word-${i}`;
+        checkbox.dataset.palavra = w.palavra;
+
+        const label = document.createElement("label");
+        label.htmlFor = `word-${i}`;
+        label.textContent = w.palavra;
+        
+        li.appendChild(checkbox);
+        li.appendChild(label);
         ul.appendChild(li);
-    })
+    });
 }
 
-const DEV = new URLSearchParams(location.search).has("dev");
+function startTimer(readySec, seconds, onEnd) {
+    const el = document.getElementById("timer");
 
-if (DEV) {
-    state.players= ["Ana", "Beto", "Carlos", "Duda", "Eva", "Fábio"];
-    state.mode = "teams";
-    state.teams = sliceTeams(state.players);
-    renderPlayers();
-    renderTeams();
+    clearInterval(timerId);
+
+    let secReady = readySec;
+    let remaining = seconds;
+    el.textContent = secReady;
+
+    timerId = setInterval(() => {
+        secReady--;
+        el.textContent = secReady;
+
+        if (secReady <= 0){
+            el.textContent = "Valendo!!!";
+            clearInterval(timerId);
+            timerId = setInterval(() => {
+                remaining--;
+                el.textContent = remaining;
+
+                if (remaining <= 0) {
+                    clearInterval(timerId);
+                    timerId = null;
+                    onEnd();
+                }
+            }, 1000);
+        }
+        
+    }, 1000);
+}
+
+function startRound() {
+    showRoundWords();
+    startTimer(5, ROUND_TIME, endRound);
+}
+
+function endRound() {
+    document.getElementById("btn-words").disabled = false;
+    alert("Tempo esgotado!");
+}
+
+document.getElementById("btn-words").addEventListener("click", () => {
+    document.getElementById("btn-words").disabled = true;
+    startRound();
+})
+
+function tallyRoundScore() {
+    const checkboxes = document.querySelectorAll("#words-list input[type='checkbox']");
+    const acertos = [...checkboxes].filter(cb => cb.checked).length;
+
+    const { name, team } = getCurrentPlayerName();
+    const key = state.mode === "solo" ? name : `Time ${team}`;
+
+    state.points[key] = (state.points[key] || 0) + acertos;
+}
+
+function renderScore() {
+    const ptsT1 = state.points["Time 1"];
+    const ptsT2 = state.points["Time 2"];
+    
+    document.getElementById("score-time1").textContent = ptsT1;
+    document.getElementById("score-time2").textContent = ptsT2;
+
+    console.log(`Pontos: ${ptsT1}`);
+    console.log(`Pontos: ${ptsT2}`);
+    
+}
+
+function getCurrentPlayerName() {
+    if (state.mode === "solo") {
+        return {
+            name: state.players[state.turn % state.players.length],
+            team: null
+        };
+    }
+
+    const teamIdx = state.turn % 2;
+    const team = state.teams[teamIdx];
+    const posInTeam = Math.floor(state.turn/2) % team.length;
+
+    return { name: team[posInTeam], team: teamIdx + 1 };
+}
+
+function renderCurrentPlayer() {
+    const { name, team } = getCurrentPlayerName();
+
+    document.getElementById("current-player").textContent = name;
+    document.getElementById("current-team").textContent = team ? `Equipe ${team}` : "";
+}
+
+document.getElementById("btn-next").addEventListener("click", nextPlayer);
+
+function nextPlayer() {
+    tallyRoundScore();
+    renderScore();
+    resetRound();
+    state.turn++;
+    renderCurrentPlayer();
 }
