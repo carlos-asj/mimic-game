@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MÍMICA</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+    <script src="words.js"></script>
     <main>
         <section id="config" class="screen active">
             <h1 class="title">JOGO DE MÍMICA</h1>
@@ -29,21 +31,41 @@
                 <button id="btn-shuffle">Embaralhar Times</button>
             </div>
     
-            <button id="btn-start" onclick="showScreen('screen-game')">Começar</button>
+            <button id="btn-start">Começar</button>
         </section>
 
         <section id="screen-game" class="screen">
-            <h1 class="title"><span id="player"></span></h1>
-            <button id="btn-words">Mostrar palavras</button>
+            <p class="playerName"><span id="current-player"></span></p>
+            <p id="current-team" class="subtitle"></p>
+            <div class="show-words">
+                <button id="btn-words" class="btn-show btn">MOSTRAR PALAVRAS</button>
+                <button id="btn-next">PRÓXIMO JOGADOR
+                <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
             <div id="word-box">
                 <ul id="words-list"></ul>
             </div>
-            <button onclick="showScreen('screen-round')">Próximo</button>
+            <div id="timer"></div>
+            <div id="endgame">
+                <button id="btn-endgame">FINALIZAR JOGO</button>
+            </div>
+            <div>
+                <p class="subtitle">SCORE</p>
+                <div id="score-box">
+                    <div class="box-team">
+                        <span class="team-text">TIME 1</span>
+                        <span id="score-time1"></span>
+                    </div>
+                    <div class="box-team">
+                        <span class="team-text">TIME 2</span>
+                        <span id="score-time2"></span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="screen-round" class="screen">
-            <h1>TIMER</h1>
-            <h2>PALAVRAS</h2>
+            <h1>PONTUAÇÃO</h1>
             <button onclick="showScreen('screen-scores')">Terminar</button>
         </section>
         <section id="screen-scores" class="screen">
