@@ -47,6 +47,7 @@
     background-color: #2E2E2E;
     color: white;
     cursor: pointer;
+    font-weight: bold;
 }
 
 #word-box {
@@ -151,4 +152,92 @@ li {
 
 .team-text {
     font-weight: bold;
+}
+
+#player-config {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 20px;
+}
+
+#player-config input[type="text"] {
+    border-radius: 10px;
+    border: 2px solid;
+    padding: 0 10px;
+}
+
+#players-list {
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+#players-list li {
+    position: relative;
+    width: 50px;
+    text-align: center;
+    padding-right: 100px;
+}
+
+#players-list .btn-remove {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.btn-remove {
+    background-color: red;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+#start-box {
+    display: flex;
+    justify-content: center;
+}
+
+#start-box button {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(35, 255, 57, 1);
+    color: #116b0a;
+    font-weight: bold;
+}
+
+#teams-box {
+    display: grid;
+    grid-template-columns: 150px 150px;
+    justify-content: center;
+}
+
+#teams-box .team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#teams-box .team-container h3 {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    text-align: center;
+}
+
+#teams-box .team-container ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 0;
+}
+
+#shuffle-box {
+    display: flex;
+    justify-content: center;
 }

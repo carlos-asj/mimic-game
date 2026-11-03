@@ -35,6 +35,7 @@ function renderPlayers() {
         li.textContent = name + " ";
         const btn = document.createElement("button");
         btn.textContent = "Remover";
+        btn.classList.add("btn-remove");
         btn.addEventListener("click", () => {
             state.players.splice(i, 1);
             renderPlayers();

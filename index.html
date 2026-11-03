@@ -12,26 +12,32 @@
     <main>
         <section id="config" class="screen active">
             <h1 class="title">JOGO DE MÍMICA</h1>
-            <input type="text" id="input-player" placeholder="Nome do jogador">
-            <button id="btn-add">Adicionar</button>
-            <button id="btn-send">Enviar</button>
+            <div id="player-config">
+                <input type="text" id="input-player" class="player" placeholder="Nome do jogador">
+                <button id="btn-add" class="btn">+</button>
+                <button id="btn-send" class="btn">Enviar</button>
+            </div>
     
             <ul id="players-list"></ul>
             <p id="msg-err"></p>
             <div id="teams-box" class="teams-box">
-                <div>
+                <div class="team-container">
                     <h3>Equipe 1</h3>
                     <ul id="team-1"></ul>
                 </div>
-                <div>
+                <div class="team-container">
                     <h3>Equipe 2</h3>
                     <ul id="team-2"></ul>
                 </div>
 
-                <button id="btn-shuffle">Embaralhar Times</button>
+                <div id="shuffle-box">
+                    <button id="btn-shuffle">Embaralhar Times</button>
+                </div>
             </div>
     
-            <button id="btn-start">Começar</button>
+            <div id="start-box">
+                <button id="btn-start">Começar</button>
+            </div>
         </section>
 
         <section id="screen-game" class="screen">
