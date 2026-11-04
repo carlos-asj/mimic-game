@@ -3,8 +3,15 @@
 }
 
 .screen.active { display: block; }
-.teams-box { display: none;}
-.teams-box.active { display: block; }
+.teams-box { display: none; }
+.teams-box.active {
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 0 auto;
+}
 
 .title {
     font-size: 40px;
@@ -208,36 +215,47 @@ li {
     background-color: rgba(35, 255, 57, 1);
     color: #116b0a;
     font-weight: bold;
+    cursor: pointer;
 }
 
-#teams-box {
-    display: grid;
-    grid-template-columns: 150px 150px;
-    justify-content: center;
+h3 {
+    text-align: center;
+    margin-bottom: 0;
 }
 
 #teams-box .team-container {
     display: flex;
     flex-direction: column;
-    align-items: center;
-}
-
-#teams-box .team-container h3 {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-    text-align: center;
-}
-
-#teams-box .team-container ul {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin-top: 0;
 }
 
 #shuffle-box {
+    display: none;
+}
+
+#shuffle-box.active {
     display: flex;
     justify-content: center;
+}
+
+#shuffle-box button {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+table {
+}
+
+td {
+    padding: 10px 20px;
+}
+
+th {
+    padding: 10px 30px;
 }
