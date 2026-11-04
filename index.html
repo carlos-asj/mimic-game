@@ -11,7 +11,7 @@
     <script src="words.js"></script>
     <main>
         <section id="config" class="screen active">
-            <h1 class="title">JOGO DE MÍMICA</h1>
+            <h1 class="title">MÍMICA</h1>
             <div id="player-config">
                 <input type="text" id="input-player" class="player" placeholder="Nome do jogador">
                 <button id="btn-add" class="btn">+</button>
@@ -22,17 +22,20 @@
             <p id="msg-err"></p>
             <div id="teams-box" class="teams-box">
                 <div class="team-container">
-                    <h3>Equipe 1</h3>
-                    <ul id="team-1"></ul>
-                </div>
-                <div class="team-container">
-                    <h3>Equipe 2</h3>
-                    <ul id="team-2"></ul>
+                    <table>
+                        <thead>
+                            <tr><th>Equipe 1</th><th>Equipe 2</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr id="team-1"></tr>
+                            <tr id="team-2"></tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <div id="shuffle-box">
-                    <button id="btn-shuffle">Embaralhar Times</button>
-                </div>
+            </div>
+            <div id="shuffle-box">
+                <button id="btn-shuffle">Embaralhar Times</button>
             </div>
     
             <div id="start-box">

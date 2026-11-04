@@ -47,25 +47,24 @@ function renderPlayers() {
 
 function renderTeams() {
     const [t1, t2] = state.teams;
-    const ul1 = document.getElementById("team-1");
-    const ul2 = document.getElementById("team-2");
-    ul1.innerHTML = "";
-    ul2.innerHTML = "";
+    const td1 = document.getElementById("team-1");
+    const td2 = document.getElementById("team-2");
+    td1.innerHTML = "";
+    td2.innerHTML = "";
 
     t1.forEach(name => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        ul1.appendChild(li);
+        const tr = document.createElement("td");
+        tr.textContent = name;
+        td1.appendChild(tr);
     });
 
     t2.forEach(name => {
-        const li = document.createElement("li");
-        li.textContent = name;
-        ul2.appendChild(li);
+        const tr = document.createElement("td");
+        tr.textContent = name;
+        td2.appendChild(tr);
     });
 }
 
-document.getElementById("btn-start").addEventListener("click", startGame);
 
 function showTeams() {
     const total = state.players.length;
@@ -87,7 +86,12 @@ function showTeams() {
     state.teams = sliceTeams(state.players);
     renderTeams();
     teamsBox.classList.add("active");
+
+    const shufBox = document.getElementById("shuffle-box");
+    shufBox.classList.add("active");
 }
+
+document.getElementById("btn-start").addEventListener("click", startGame);
 
 document.getElementById("btn-send").addEventListener("click", showTeams);
 
